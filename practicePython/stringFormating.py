@@ -42,3 +42,6 @@ print("%10s" % greeting)
 
 # 10의 길이로 왼쪽 정렬
 print("%-10sjane" % greeting)
+
+floatTypeNumber = 3.42134234
+print("%0.4f" % floatTypeNumber)
