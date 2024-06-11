@@ -1,0 +1,45 @@
+#가상환경 생성 방법 [OS: Linux, Mac]
+    >> python -m venv dir1/dir2/venvName --> 해당 경로가 존재하지 않을 경우 자동으로 경로를 생성해준다.
+
+#가상환경 실행 방법 [OS: Linux, Mac]
+    >> source ./venvName/bin/activate
+
+#실행 후 [OS: Linux, Mac]
+    >>(venvName) --> 프롬프트가 이와 같이 출력되면 가상환경이 정상적으로 실행 됐음을 확인할 수 있다.
+
+`가상환경이 실행된 상태에서는 python이나 pip를 콘솔에서 호출하더라도, 원래 설치되어 있는 python과 pip가 아니라 venv 내부에 있는 python과 pip가 호출된다.
+즉, pip install을 통해 모듈을 설치하더라도 venv 폴더 내부에만 설치가 될 뿐, 본래의 파이썬 모듈에 설치되지 않습니다.
+
+#가상환경 종료 방법 [OS: Linux, Mac]
+    >> deactivate
+
+#가상환경의 폴더 이름을 바꿔 제대로 동작이 안되는 경우
+
+`venv를 활성화하는 스크립트는 내부적으로 VIRTUAL_ENV 라는 환경변수를 고정해서 쓰고 있습니다.
+따라서, 가상환경 생성 후에 폴더 이름을 변경하면 정상적으로 경로를 잡지 못합니다.
+
+#첫 째, 스크립트 내용을 수정해 해결이 가능합니다.
+`venv/bin 폴더 내에 activate 파일이 3개가 있습니다. 여러가지 쉘에서 실행할 수 있도록 3가지 쉘스크립트로 내놓은 것인데,
+아무 확장자가 없는 activate가 bash에서 작동될 수 있는 쉘스크립트입니다. 원래대로라면 3가지를 전부 다 수정해야겠지만,
+bash에서만 사용할 것이라면 activate만 수정해도 무방합니다.
+
+`activate 파일에서 VIRTUAL_ENV 부분을 찾아서 경로를 알맞게 수정하면 됩니다. pip와 pip3 또한 shebang 경로가 그대로 있으므로 열어서 수정을 해줘야합니다.
+가장 첫째 줄의 #! 부분이 shebang입니다. 이는 스크립트 실행 프로그램을 명시해주는 구문이므로 이 부분도 알맞게 수정해야만 합니다.
+
+#둘 째, venv를 재설치한다.
+    >> pip freeze > requirements.txt
+
+`freeze 명령어는 현재 venv(혹은 파이썬 기본 인터프리터)에 설치되어 있는 라이브러리의 이름과 버전을 따로 추출하는 명령어입니다.
+뒤에 `> requirements.txt`를 붙이면, 해당 결과를 requirements.txt에 저장하게 됩니다.
+
+가상환경을 지웁니다.
+    >> rm -rf ./venv
+
+이후 재설치를 하되, requirements.txt의 파일을 읽도록 지정해주면 됩니다.
+    >> python -m venv /path/to/venv
+    >> source /path/to/venv/bin/activate
+    >> pip install -r requirements.txt
+
+`pip install에서 -r 옵션을 지정하면, 특정 파일로부터 의존성 정보를 읽어서 설치해줍니다.
+
+이 방법은 의존성 정보를 그대로 가지고 새롭게 가상환경을 재구축하는 방법입니다.
