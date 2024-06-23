@@ -5,4 +5,4 @@ for i in range(1, 11):
 f.close()
 
 # f = open("review.txt", 'w')
-# f.close()s
+# f.close()
